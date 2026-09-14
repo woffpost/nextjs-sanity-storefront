@@ -2,24 +2,41 @@
   "name": "nextjs-sanity-storefront",
   "version": "0.1.0",
   "private": true,
+  "description": "Open-source commerce demo: Next.js App Router + Sanity (Live Preview) + Stripe Checkout.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/woffpost/nextjs-sanity-storefront"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "stripe:listen": "stripe listen --forward-to localhost:3000/api/webhooks/stripe",
+    "seed": "node scripts/seed.mjs"
   },
   "dependencies": {
+    "@portabletext/react": "^8.0.1",
+    "@sanity/image-url": "^2.1.1",
+    "@sanity/vision": "^6.13.2",
     "next": "16.3.5",
+    "next-sanity": "^13.3.4",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "sanity": "^6.13.2",
+    "stripe": "^22.6.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.4.2",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
+    "sharp": "^0.35.4",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
