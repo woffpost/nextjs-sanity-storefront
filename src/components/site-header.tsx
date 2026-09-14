@@ -8,14 +8,24 @@ export function SiteHeader() {
   const { count } = useCart();
 
   return (
-    <header className="border-b border-neutral-200">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <Link href="/" className="font-semibold tracking-tight">
+    <header className="sticky top-0 z-40 border-b border-border bg-paper/90 backdrop-blur-sm">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+        <Link href="/" className="font-display text-xl tracking-tight">
           Storefront
         </Link>
-        <Link href="/cart" className="text-sm underline underline-offset-4">
-          Cart{count > 0 ? ` (${count})` : ""}
-        </Link>
+        <nav className="flex items-center gap-8">
+          <Link
+            href="/cart"
+            className="label flex items-center gap-2 text-ink-soft transition hover:text-ink"
+          >
+            Cart
+            {count > 0 && (
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-[10px] font-medium text-paper-raised">
+                {count}
+              </span>
+            )}
+          </Link>
+        </nav>
       </div>
     </header>
   );

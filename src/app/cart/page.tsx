@@ -32,9 +32,12 @@ export default function CartPage() {
 
   if (lines.length === 0) {
     return (
-      <div className="mx-auto max-w-2xl px-6 py-16 text-center">
-        <p className="text-neutral-600">Your cart is empty.</p>
-        <Link href="/" className="mt-4 inline-block underline underline-offset-4">
+      <div className="mx-auto max-w-2xl px-6 py-28 text-center">
+        <p className="font-display text-2xl">Your cart is empty.</p>
+        <Link
+          href="/"
+          className="label mt-6 inline-block text-ink-soft underline decoration-border-strong underline-offset-4 transition hover:text-ink"
+        >
           Continue shopping
         </Link>
       </div>
@@ -42,28 +45,40 @@ export default function CartPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-12">
-      <h1 className="text-xl font-semibold tracking-tight">Cart</h1>
+    <div className="mx-auto max-w-3xl px-6 py-16">
+      <h1 className="font-display text-3xl">Your cart</h1>
 
-      <ul className="mt-8 divide-y divide-neutral-200">
+      <ul className="mt-10 divide-y divide-border border-y border-border">
         {lines.map((line) => (
-          <li key={line.productId} className="flex items-center justify-between gap-4 py-4">
-            <div>
-              <p className="text-sm font-medium">{line.name}</p>
-              <p className="text-sm text-neutral-500">${line.priceUsd.toFixed(2)}</p>
+          <li key={line.productId} className="flex items-center justify-between gap-6 py-6">
+            <div className="min-w-0">
+              <p className="font-display text-lg">{line.name}</p>
+              <p className="label mt-1 text-ink-soft">${line.priceUsd.toFixed(2)}</p>
             </div>
-            <div className="flex items-center gap-3">
-              <input
-                type="number"
-                min={0}
-                value={line.quantity}
-                onChange={(e) => setQuantity(line.productId, Number(e.target.value))}
-                className="w-16 rounded border border-neutral-300 px-2 py-1 text-sm"
-              />
+            <div className="flex shrink-0 items-center gap-5">
+              <div className="flex items-center rounded-sm border border-border">
+                <button
+                  type="button"
+                  aria-label="Decrease quantity"
+                  onClick={() => setQuantity(line.productId, line.quantity - 1)}
+                  className="flex h-9 w-9 items-center justify-center text-ink-soft transition hover:text-ink"
+                >
+                  −
+                </button>
+                <span className="w-8 text-center text-sm tabular-nums">{line.quantity}</span>
+                <button
+                  type="button"
+                  aria-label="Increase quantity"
+                  onClick={() => setQuantity(line.productId, line.quantity + 1)}
+                  className="flex h-9 w-9 items-center justify-center text-ink-soft transition hover:text-ink"
+                >
+                  +
+                </button>
+              </div>
               <button
                 type="button"
                 onClick={() => removeItem(line.productId)}
-                className="text-sm text-neutral-400 underline underline-offset-4 hover:text-neutral-700"
+                className="label text-ink-faint underline decoration-border-strong underline-offset-4 transition hover:text-ink"
               >
                 Remove
               </button>
@@ -72,18 +87,18 @@ export default function CartPage() {
         ))}
       </ul>
 
-      <div className="mt-6 flex items-center justify-between border-t border-neutral-200 pt-6">
-        <span className="text-sm font-medium">Subtotal</span>
-        <span className="text-lg font-semibold">${subtotal.toFixed(2)}</span>
+      <div className="mt-8 flex items-center justify-between">
+        <span className="label text-ink-soft">Subtotal</span>
+        <span className="font-display text-2xl">${subtotal.toFixed(2)}</span>
       </div>
 
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-4 text-sm text-red-700">{error}</p>}
 
       <button
         type="button"
         onClick={checkout}
         disabled={loading}
-        className="mt-6 w-full rounded-md bg-neutral-900 px-4 py-3 text-sm font-medium text-white disabled:opacity-60"
+        className="label mt-8 w-full rounded-sm bg-ink px-5 py-4 text-paper transition hover:bg-accent-strong disabled:opacity-60"
       >
         {loading ? "Redirecting to Stripe…" : "Checkout with Stripe"}
       </button>

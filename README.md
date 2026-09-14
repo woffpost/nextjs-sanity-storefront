@@ -70,7 +70,23 @@ still works, but the webhook that writes `order` documents and decrements stock
 never fires locally (Stripe can't reach `localhost` directly).
 
 Add a product or two in the Studio (`/studio`) before visiting `/` — the homepage
-renders "no products yet" with a link there if the dataset is empty.
+renders "no products yet" with a link there if the dataset is empty. Or run
+`npm run seed` to populate four sample products (with generated placeholder
+images) instead of adding them by hand.
+
+## Troubleshooting
+
+**I changed content outside the Studio (a script, `npm run seed`, a direct API
+call) and the site is still showing the old version.** `sanityFetch`'s cache
+invalidation is push-based, not time-based: the Live Content API tells
+already-connected pages to revalidate when content changes, but a write made
+with no page's `<SanityLive />` connection open has no listener to notify, so
+Next's fetch cache can keep serving the pre-write response indefinitely — a
+plain restart isn't enough to fix this, since the persisted cache survives it.
+Delete the whole build cache and restart: `rm -rf .next && npm run dev`.
+Content edited through the Studio UI while a browser tab is open doesn't hit
+this — that path already has a live connection to push the invalidation
+through.
 
 ## The GROQ, and why it's written this way
 

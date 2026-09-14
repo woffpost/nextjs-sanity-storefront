@@ -29,7 +29,7 @@ export function AddToCartButton({
         setAdded(true);
         setTimeout(() => setAdded(false), 1500);
       }}
-      className="w-full rounded-md bg-neutral-900 px-4 py-3 text-sm font-medium text-white transition disabled:cursor-not-allowed disabled:bg-neutral-300"
+      className="label w-full rounded-sm bg-ink px-5 py-4 text-paper transition hover:bg-accent-strong disabled:cursor-not-allowed disabled:bg-border-strong disabled:text-ink-faint"
     >
       {disabled ? "Out of stock" : added ? "Added ✓" : "Add to cart"}
     </button>

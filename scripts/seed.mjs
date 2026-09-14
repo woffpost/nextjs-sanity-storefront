@@ -28,15 +28,42 @@ const client = createClient({
   useCdn: false,
 });
 
-/** A flat-color placeholder square with a centered label — stands in for
- * real product photography so the catalog isn't empty out of the box. */
+/** Lightens a hex color toward white by `amount` (0-1) — used for the
+ * gradient's top stop so each swatch has a little depth. */
+function lighten(hex, amount) {
+  const n = parseInt(hex, 16);
+  const r = (n >> 16) & 255;
+  const g = (n >> 8) & 255;
+  const b = n & 255;
+  const mix = (c) => Math.round(c + (255 - c) * amount);
+  return `#${[mix(r), mix(g), mix(b)].map((c) => c.toString(16).padStart(2, "0")).join("")}`;
+}
+
+/**
+ * A quiet, considered placeholder — a duotone "swatch card" in the
+ * product's accent color with the name set in a serif italic, standing in
+ * for real photography so the catalog isn't empty on first run. 4:5 to
+ * match the product card and detail-page aspect ratio.
+ */
 async function placeholderImage(label, hex) {
-  const size = 1000;
+  const width = 900;
+  const height = 1125;
+  const gradientId = `g-${hex}`;
   const svg = `
-    <svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
-      <rect width="100%" height="100%" fill="#${hex}" />
-      <text x="50%" y="50%" font-family="system-ui, sans-serif" font-size="48"
-            fill="#ffffff" text-anchor="middle" dominant-baseline="middle">${label}</text>
+    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="${gradientId}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${lighten(hex, 0.22)}" />
+          <stop offset="100%" stop-color="#${hex}" />
+        </linearGradient>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#${gradientId})" />
+      <rect x="28" y="28" width="${width - 56}" height="${height - 56}" fill="none"
+            stroke="#ffffff" stroke-opacity="0.35" stroke-width="1" />
+      <text x="56" y="${height - 72}" font-family="Georgia, 'Times New Roman', serif"
+            font-style="italic" font-size="46" fill="#fdfcfa">${label}</text>
+      <text x="56" y="${height - 40}" font-family="Menlo, Consolas, monospace"
+            font-size="13" letter-spacing="2" fill="#fdfcfa" fill-opacity="0.75">SAMPLE — PLACEHOLDER</text>
     </svg>
   `;
   return sharp(Buffer.from(svg)).png().toBuffer();

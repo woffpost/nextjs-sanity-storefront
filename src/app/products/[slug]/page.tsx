@@ -1,5 +1,6 @@
 import { PortableText } from "@portabletext/react";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { AddToCartButton } from "@/components/add-to-cart-button";
@@ -17,16 +18,23 @@ export default async function ProductPage(props: PageProps<"/products/[slug]">) 
   if (!product) notFound();
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-12">
-      <div className="grid gap-10 sm:grid-cols-2">
+    <div className="mx-auto max-w-6xl px-6 py-12 sm:py-16">
+      <Link href="/" className="label text-ink-faint transition hover:text-ink">
+        ← All products
+      </Link>
+
+      <div className="mt-8 grid gap-12 sm:grid-cols-2 sm:gap-16">
         <div className="grid gap-3">
           {product.images?.map((image, i) => (
-            <div key={i} className="aspect-square overflow-hidden rounded-lg bg-neutral-100">
+            <div
+              key={i}
+              className="aspect-[4/5] overflow-hidden rounded-sm bg-accent-soft ring-1 ring-border"
+            >
               <Image
-                src={urlForImage(image).width(800).height(800).url()}
+                src={urlForImage(image).width(900).height(1125).url()}
                 alt={product.name}
-                width={800}
-                height={800}
+                width={900}
+                height={1125}
                 className="h-full w-full object-cover"
                 priority={i === 0}
               />
@@ -34,17 +42,19 @@ export default async function ProductPage(props: PageProps<"/products/[slug]">) 
           ))}
         </div>
 
-        <div>
-          {product.category && (
-            <p className="text-xs uppercase tracking-wide text-neutral-500">
-              {product.category.title}
+        <div className="sm:sticky sm:top-24 sm:self-start">
+          {product.category && <p className="label text-accent">{product.category.title}</p>}
+          <h1 className="font-display mt-2 text-4xl leading-tight text-balance">
+            {product.name}
+          </h1>
+          <p className="label mt-4 text-ink-soft">${product.priceUsd.toFixed(2)}</p>
+          {product.excerpt && (
+            <p className="mt-5 max-w-sm text-lg leading-relaxed text-ink-soft">
+              {product.excerpt}
             </p>
           )}
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight">{product.name}</h1>
-          <p className="mt-2 text-xl">${product.priceUsd.toFixed(2)}</p>
-          {product.excerpt && <p className="mt-4 text-neutral-600">{product.excerpt}</p>}
 
-          <div className="mt-6">
+          <div className="mt-8 max-w-xs">
             <AddToCartButton
               productId={product._id}
               name={product.name}
@@ -55,7 +65,7 @@ export default async function ProductPage(props: PageProps<"/products/[slug]">) 
           </div>
 
           {product.description && (
-            <div className="prose prose-neutral prose-sm mt-8 max-w-none">
+            <div className="prose prose-neutral prose-sm mt-10 max-w-sm text-ink-soft">
               <PortableText value={product.description} />
             </div>
           )}
@@ -63,11 +73,9 @@ export default async function ProductPage(props: PageProps<"/products/[slug]">) 
       </div>
 
       {product.related?.length > 0 && (
-        <div className="mt-16">
-          <h2 className="mb-6 text-sm font-medium uppercase tracking-wide text-neutral-500">
-            You might also like
-          </h2>
-          <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3">
+        <div className="mt-24 border-t border-border pt-12">
+          <p className="label text-ink-faint">You might also like</p>
+          <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-14 sm:grid-cols-3">
             {product.related.map((related) => (
               <ProductCard key={related._id} product={related} />
             ))}

@@ -14,31 +14,44 @@ export default async function HomePage() {
   const settings = rawSettings as unknown as StoreSettingsResult;
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-12">
-      <div className="mb-10">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {settings?.storeName ?? "Storefront"}
-        </h1>
-        {settings?.storeDescription && (
-          <p className="mt-2 max-w-xl text-neutral-600">{settings.storeDescription}</p>
-        )}
-      </div>
-
-      {products.length === 0 ? (
-        <p className="text-neutral-500">
-          No products yet — add one in{" "}
-          <Link href="/studio" className="underline">
-            the Studio
-          </Link>
-          .
-        </p>
-      ) : (
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3">
-          {products.map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
+    <div>
+      <section className="border-b border-border">
+        <div className="mx-auto max-w-6xl px-6 py-20 sm:py-28">
+          <p className="label text-accent">{products.length} pieces, all in stock</p>
+          <h1 className="font-display mt-4 max-w-2xl text-balance text-5xl leading-[1.05] sm:text-6xl">
+            {settings?.storeName ?? "Storefront"}
+          </h1>
+          {settings?.storeDescription && (
+            <p className="mt-5 max-w-md text-lg leading-relaxed text-ink-soft">
+              {settings.storeDescription}
+            </p>
+          )}
         </div>
-      )}
+      </section>
+
+      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+        {products.length === 0 ? (
+          <p className="text-ink-soft">
+            No products yet — add one in{" "}
+            <Link href="/studio" className="text-ink underline underline-offset-4">
+              the Studio
+            </Link>
+            .
+          </p>
+        ) : (
+          <div className="grid grid-cols-2 gap-x-6 gap-y-14 sm:grid-cols-3">
+            {products.map((product, i) => (
+              <div
+                key={product._id}
+                className="fade-up"
+                style={{ animationDelay: `${Math.min(i, 6) * 60}ms` }}
+              >
+                <ProductCard product={product} />
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }
