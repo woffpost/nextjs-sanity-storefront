@@ -46,7 +46,7 @@ export default async function HomePage() {
                 className="fade-up"
                 style={{ animationDelay: `${Math.min(i, 6) * 60}ms` }}
               >
-                <ProductCard product={product} />
+                <ProductCard product={product} index={i} />
               </div>
             ))}
           </div>

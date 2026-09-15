@@ -25,6 +25,12 @@ type CartContextValue = {
    * so its effect fires after) and gets silently overwritten by the
    * stored cart. */
   hydrated: boolean;
+  /** The slide-over cart panel's open state — lives here so any component
+   * (the header's cart button, "add to cart") can open or close the same
+   * drawer without prop-drilling. */
+  drawerOpen: boolean;
+  openDrawer: () => void;
+  closeDrawer: () => void;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -33,6 +39,7 @@ const STORAGE_KEY = "storefront-cart";
 export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
   const [hydrated, setHydrated] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   // Deliberately not a `useState` lazy initializer: the server always
   // renders an empty cart (no `window`), so reading localStorage during the
@@ -92,8 +99,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const subtotal = lines.reduce((sum, line) => sum + line.priceUsd * line.quantity, 0);
     const count = lines.reduce((sum, line) => sum + line.quantity, 0);
 
-    return { lines, addItem, removeItem, setQuantity, clear, subtotal, count, hydrated };
-  }, [lines, hydrated]);
+    return {
+      lines,
+      addItem,
+      removeItem,
+      setQuantity,
+      clear,
+      subtotal,
+      count,
+      hydrated,
+      drawerOpen,
+      openDrawer: () => setDrawerOpen(true),
+      closeDrawer: () => setDrawerOpen(false),
+    };
+  }, [lines, hydrated, drawerOpen]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

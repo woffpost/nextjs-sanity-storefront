@@ -17,7 +17,7 @@ export function AddToCartButton({
   slug: string;
   disabled?: boolean;
 }) {
-  const { addItem } = useCart();
+  const { addItem, openDrawer } = useCart();
   const [added, setAdded] = useState(false);
 
   return (
@@ -27,6 +27,7 @@ export function AddToCartButton({
       onClick={() => {
         addItem({ productId, name, priceUsd, slug });
         setAdded(true);
+        openDrawer();
         setTimeout(() => setAdded(false), 1500);
       }}
       className="label w-full rounded-sm bg-ink px-5 py-4 text-paper transition hover:bg-accent-strong disabled:cursor-not-allowed disabled:bg-border-strong disabled:text-ink-faint"

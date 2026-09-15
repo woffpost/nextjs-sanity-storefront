@@ -7,7 +7,9 @@ import { SanityLive } from "@/sanity/lib/live";
 import { CartProvider } from "@/lib/cart-context";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { CartDrawer } from "@/components/cart-drawer";
 import { DisableDraftMode } from "@/components/disable-draft-mode";
+import { GrainOverlay } from "@/components/grain-overlay";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,6 +29,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: "Storefront — Next.js + Sanity + Stripe demo",
   description:
     "An open-source commerce demo: Next.js App Router, a Sanity-authored catalog with Live Preview, and Stripe Checkout.",
@@ -41,10 +44,12 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-paper text-ink">
+        <GrainOverlay />
         <CartProvider>
           <SiteHeader />
           <main className="flex-1">{children}</main>
           <SiteFooter />
+          <CartDrawer />
         </CartProvider>
         {/* Opens the SSE connection every `sanityFetch` call subscribes to —
             this is what makes edits in the Studio show up without a reload. */}
